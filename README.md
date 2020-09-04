@@ -295,7 +295,9 @@ mysql> ALTER TABLE table2
        ADD FOREIGN KEY (COL2) REFERENCE table1(COL2);
 ```
 
-* Practical Exercise #4
+## Practical Exercise #4 
+
+### Trial Result
 
 ```sql
 // Q1
@@ -317,7 +319,48 @@ mysql> select s.seller_id, s.seller_name, avg(t.transaction_amount) FROM seller 
 
 ```
 
-PE #4 Answers
-1. select c.customer_name, t.transaction_datetime from customer as c left join transaction as t on c.customer_id = t.customer_id;
-2. select c.customer_name, max(t.transaction_datetime) from customer as c left join transaction as t on c.customer_id = t.customer_id group by c.customer_id;
-3. select s.seller_name, avg(t.transaction_amount) from seller as s left join transaction as t on s.seller_id = t.seller_id group by s.seller_id;
+### Model Answers
+
+```sql
+// Q1
+mysql> select c.customer_name, t.transaction_datetime from customer as c left join transaction as t on c.customer_id = t.customer_id;
+
+
+// Q2
+mysql> select c.customer_name, max(t.transaction_datetime) from customer as c left join transaction as t on c.customer_id = t.customer_id group by c.customer_id;
+
+
+// Q3
+mysql> select s.seller_name, avg(t.transaction_amount) from seller as s left join transaction as t on s.seller_id = t.seller_id group by s.seller_id;
+```
+
+## Data mock tools
+* [mockaroo](https://www.mockaroo.com/)
+* [generatedata](https://www.generatedata.com/)
+
+## Using MySQL Shell
+1. Switch to SQL mode
+```sql
+MySQL JS> \sql
+
+// connect data
+MySQL JS> \connect root@localhost:3306
+
+// proceed with normal sql command
+MySQL localhost:3306 ssl SQL> show databases;
+
+// open ntuc db
+MySQL localhost:3306 ssl SQL> use ntuc;
+
+// show tables in ntuc
+MySQL localhost:3306 ssl SQL> show tables;
+
+// show store_test table description
+MySQL localhost:3306 ssl SQL> describe store_test;
+
+// display table records
+MySQL localhost:3306 ssl SQL> select * from store_test;
+
+
+
+```
