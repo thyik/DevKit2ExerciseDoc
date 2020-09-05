@@ -364,3 +364,13 @@ MySQL localhost:3306 ssl SQL> select * from store_test;
 
 
 ```
+
+## Generate sql Dump data
+
+1. Windows command prompt. Execute below command
+
+```shell
+// change to MySQL binary folder
+C:\> cd "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqldump.exe" -u root -p nusbank > d:/nusbank.sql
+
+```
