@@ -51,14 +51,16 @@ CREATE TABLE messages (
 
 ## Import data to table
 
-* import sql format data
+### import sql format data
 
 ```sql
 mysql> source E:/downloads/users.sql;
 
 ```
 
-* import csv format data. This is a bit more tricky
+### import csv format data (This is a bit more tricky)
+* for windows, need to put the csv file to the upload folder. Else the command will not have privilege to execute
+* [reference](https://riptutorial.com/mysql/example/10715/import-a-csv-file-into-a-mysql-table)
 
 ```sql
 
@@ -99,3 +101,33 @@ C:> "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqldump.exe" -u root -p nusba
 ```
 
 ## Data Queries
+
+* show average transaction of an account
+```sql
+
+// show each user account number
+mysql> SELECT a.user_id, u.name, a.acct_number, a.acct_type from accounts AS a 
+INNER JOIN users AS u 
+ON a.user_id = u.user_id
+GROUP BY a.acct_number
+ORDER BY a.user_id;
+
+// show each user average monthly spending
+
+// show each account average spending
+mysql> SELECT a.user_id, t.acct_number, AVG(t.amount) from transactions AS t
+JOIN accounts AS a
+ON a.acct_number = t.acct_number
+GROUP BY t.acct_number
+ORDER BY a.user_id;
+
+// show most frequent transaction type
+mysql> SELECT MAX(t.type) FROM transactions AS t;
+mysql> SELECT t.type, COUNT(t.type) FROM transactions AS t;
+
+// show customer who have lowest and highest balance
+
+// show total balance of each user accounts
+mysql> SELECT a.user_id, SUM(a.balance) FROM accounts AS a
+GROUP BY a.user_id;
+```
