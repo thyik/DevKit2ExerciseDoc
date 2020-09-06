@@ -105,6 +105,126 @@ C:> "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqldump.exe" -u root -p nusba
 * show average transaction of an account
 ```sql
 
+// show transactions with match to the account users id
+// table1 = transactions
+// table2 = accounts
+SELECT a.user_id, a.acct_number, t.amount
+FROM transactions AS t
+INNER JOIN accounts AS a
+ON a.acct_number = t.acct_number
+ORDER BY a.user_id
+
+// show all users acct with and without transaction
+SELECT a.user_id, a.acct_number, t.amount
+FROM transactions AS t
+RIGHT JOIN accounts AS a
+ON a.acct_number = t.acct_number
+ORDER BY a.user_id
+
+// show transactions without matching user account (phantom transaction)
+// ?? something wrong with transactions dataset....
+SELECT a.user_id, a.acct_number, t.amount
+FROM transactions AS t
+LEFT JOIN accounts AS a
+ON a.acct_number = t.acct_number
+ORDER BY a.user_id
+
+
+/// average transactions for each user
+SELECT a.user_id, a.acct_number, AVG(t.amount)
+FROM transactions AS t
+INNER JOIN accounts AS a
+ON a.acct_number = t.acct_number
+GROUP BY a.user_id
+ORDER BY a.user_id
+
+/// average transactions for each user
+SELECT a.user_id, a.acct_number, AVG(t.amount)
+FROM transactions AS t
+INNER JOIN accounts AS a
+ON a.acct_number = t.acct_number
+GROUP BY a.user_id
+ORDER BY a.user_id
+
+// average maonthly transactions for each user
+// ? mix of multiple year?
+SELECT a.user_id, a.acct_number, t.date, AVG(t.amount)
+FROM transactions AS t
+INNER JOIN accounts AS a
+ON a.acct_number = t.acct_number
+GROUP BY a.user_id, MONTH(t.date)
+ORDER BY a.user_id
+
+//
+INSERT INTO transactions (acct_number, id, date, type, amount)
+VALUES (337941218931961, 99999999, '2020-09-29 16:00:09', 'grocery', 99.00);
+
+
+// Ans : average monthly transactions for each users 
+SELECT a.user_id, a.acct_number, t.date, AVG(t.amount)
+FROM transactions AS t
+INNER JOIN accounts AS a
+ON a.acct_number = t.acct_number
+GROUP BY a.user_id, MONTH(t.date), YEAR(date)
+ORDER BY a.user_id
+
+// show count of each type of transaction for each user
+SELECT a.user_id, a.acct_number, t.date, COUNT(t.type)
+FROM transactions AS t
+INNER JOIN accounts AS a
+ON a.acct_number = t.acct_number
+GROUP BY a.user_id, t.type
+ORDER BY a.user_id
+
+// Ans : show most frequent transaction type
+/// ?? count correct BUT display match to wrong type
+// nested query
+SELECT t1.user_id, t1.ttype, MAX(t1.ctype)
+FROM (SELECT a.user_id, a.acct_number, t.date, t.type as ttype, COUNT(t.type) as ctype
+      FROM transactions AS t
+      INNER JOIN accounts AS a
+      ON a.acct_number = t.acct_number
+      GROUP BY a.user_id, t.type
+      ORDER BY a.user_id) as t1
+GROUP BY t1.user_id;
+
+// show sum of all users
+SELECT u.user_id, u.name, SUM(a.balance) FROM accounts AS a
+INNER JOIN users AS u
+ON a.user_id = u.user_id
+GROUP BY a.user_id
+ORDER BY u.user_id;
+
+// show highest balance
+SELECT u.user_id, u.name, SUM(a.balance) AS total FROM accounts AS a
+INNER JOIN users AS u
+ON a.user_id = u.user_id
+GROUP BY a.user_id
+ORDER BY total DESC
+LIMIT 1
+
+// show lowest balance
+SELECT u.user_id, u.name, SUM(a.balance) AS total FROM accounts AS a
+INNER JOIN users AS u
+ON a.user_id = u.user_id
+GROUP BY a.user_id
+ORDER BY total ASC
+LIMIT 1
+
+
+///Ans: find highest monthly transaction
+SELECT a.user_id, u.name, a.acct_number, t.date, COUNT(a.user_id) as cmonth
+FROM transactions AS t
+INNER JOIN accounts AS a
+ON a.acct_number = t.acct_number
+INNER JOIN users AS u
+ON u.user_id = a.user_id
+GROUP BY a.user_id, MONTH(t.date), YEAR(t.date)
+ORDER BY cmonth DESC
+LIMIT 1
+
+
+//// Misc
 // show each user account number
 mysql> SELECT a.user_id, u.name, a.acct_number, a.acct_type from accounts AS a 
 INNER JOIN users AS u 
@@ -113,6 +233,11 @@ GROUP BY a.acct_number
 ORDER BY a.user_id;
 
 // show each user average monthly spending
+mysql> SELECT t.date, a.user_id, t.acct_number, AVG(t.amount) from transactions AS t
+JOIN accounts AS a
+ON a.acct_number = t.acct_number
+GROUP BY YEAR(t.date), MONTH(t.date)
+ORDER BY t.date;
 
 // show each account average spending
 mysql> SELECT a.user_id, t.acct_number, AVG(t.amount) from transactions AS t

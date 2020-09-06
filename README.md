@@ -285,6 +285,10 @@ mysql> CREATE TABLE table1(
        COL1 INT
        COL2 INT)
        PRIMARY KEY (COL1);
+
+//
+mysql> ALTER TABLE Persons
+ADD PRIMARY KEY (ID);       
 ```  
 
 * `FOREIGN KEY` clause
@@ -371,6 +375,6 @@ MySQL localhost:3306 ssl SQL> select * from store_test;
 
 ```shell
 // change to MySQL binary folder
-C:\> cd "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqldump.exe" -u root -p nusbank > d:/nusbank.sql
+C:\> "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqldump.exe" -u root -p nusbank > d:/nusbank.sql
 
 ```
