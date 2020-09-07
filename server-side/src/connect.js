@@ -33,4 +33,22 @@ mysqlConnection.query(`DELETE FROM users WHERE user_id = ${id}`, (err, result) =
     }
 });
 
+console.log("...add a record");
+let name = "Harry Lim";
+let mail = "harrylim@abc.com";
+let mobile = 99999;
+let nric = "S1234532A";
+
+mysqlConnection.query(
+    `INSERT INTO users(user_id, name, mail, mobile, nric) 
+    VALUES (${id},'${name}', '${mail}', ${mobile}, '${nric}')`,
+    (err, results) => {
+        if (err){
+            console.log(err);
+        } else {
+            if (results["affectedRows"] != 0) {
+                console.log("Added", results);
+            }
+        }        
+    });
 
