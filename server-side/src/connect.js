@@ -10,7 +10,13 @@ parameters = {
 
 console.log("...connecting mysql:", parameters);
 mysqlConnection = mysql.createConnection(parameters);
-mysqlConnection.connect();
+mysqlConnection.connect((error) => {
+    if (error){
+        console.log(error);
+    } else {
+        console.log("Connection was successfull");
+    }
+});
 
 console.log("...connected mysql:", mysqlConnection);
 
