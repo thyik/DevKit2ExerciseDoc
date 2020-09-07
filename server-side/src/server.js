@@ -24,14 +24,56 @@ let app = express();
 
 app.use(bodyParser.json());
 
-// route for user query
+// GET route for /user query
 app.get("/user", (request, response) => {
-    connection.query("SELECT * FROM users LIMIT 5", (err, result) => {
+    connection.query("SELECT * FROM users LIMIT 10", 
+    (err, result) => {
         if (err) {
             response.send("Some error occur");
         }
         else {
             response.send(result);
+        }    
+    });
+});
+
+// GET route for /user/id query
+// with body = { "id": 2 }
+app.get("/user/id", (request, response) => {
+    console.log(request.body);
+    //
+    connection.query(`SELECT * FROM users WHERE user_id = ${request.body.id}`, 
+    (err, result) => {
+        if (err) {
+            response.send("Some id error occur");
+        }
+        else {
+            response.send(result);
+        }    
+    });
+});
+
+/* 
+ POST route for /user add
+  with body = {
+    "id":598,
+    "name": "John Heng",
+    "mail": "johnheng@xyz.com",
+    "mobile": "91191100",
+    "nric" : "S1234765F"
+}
+*/
+app.post("/user", (request, response) => {
+    console.log(request.body);
+    //
+    connection.query(`INSERT INTO users(user_id, name, mail, mobile, nric) 
+    VALUES (${request.body.id},'${request.body.name}', '${request.body.mail}', ${request.body.mobile}, '${request.body.nric}')`, 
+    (err, result) => {
+        if (err) {
+            response.send("Some record error occur");
+        }
+        else {
+            response.send("Record saved successfully");
         }    
     });
 });
