@@ -9,8 +9,8 @@ parameters = {
 };
 
 console.log("...connecting mysql:", parameters);
-mysqlConnection = mysql.createConnection(parameters);
-mysqlConnection.connect((error) => {
+let connection = mysql.createConnection(parameters);
+connection.connect((error) => {
     if (error){
         console.log(error);
     } else {
@@ -18,10 +18,10 @@ mysqlConnection.connect((error) => {
     }
 });
 
-console.log("...connected mysql:", mysqlConnection);
+console.log("...connected mysql:", connection);
 
 console.log("...query users table");
-mysqlConnection.query(`SELECT * FROM users LIMIT 5`, (err, result) => {
+connection.query(`SELECT * FROM users LIMIT 5`, (err, result) => {
     if (err){
         console.log(err);
     }else{
@@ -38,7 +38,7 @@ let newuser = { id: 599,
     nric: "S223311A"
 };
 
-mysqlConnection.query(`DELETE FROM users WHERE user_id = ${newuser.id}`, (err, result) =>{
+connection.query(`DELETE FROM users WHERE user_id = ${newuser.id}`, (err, result) =>{
     if (err){
         console.log(err);
     }else{
@@ -48,7 +48,7 @@ mysqlConnection.query(`DELETE FROM users WHERE user_id = ${newuser.id}`, (err, r
 
 console.log("...add a record");
 
-mysqlConnection.query(
+connection.query(
     `INSERT INTO users(user_id, name, mail, mobile, nric) 
     VALUES (${newuser.id},'${newuser.name}', '${newuser.mail}', ${newuser.mobile}, '${newuser.nric}')`,
     (err, results) => {
