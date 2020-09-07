@@ -61,3 +61,22 @@ connection.query(
         }        
     });
 
+    // query highest monthly transaction
+    connection.query(`SELECT a.user_id, u.name, a.acct_number, t.date, COUNT(a.user_id) as cmonth
+    FROM transactions AS t
+    INNER JOIN accounts AS a
+    ON a.acct_number = t.acct_number
+    INNER JOIN users AS u
+    ON u.user_id = a.user_id
+    GROUP BY a.user_id, MONTH(t.date), YEAR(t.date)
+    ORDER BY cmonth DESC
+    LIMIT 1`,
+    (err, results) => {
+        if (err){
+            console.log(err);
+        } else {
+            if (results["affectedRows"] != 0) {
+                console.log("Highest Monthly", results);
+            }
+        }        
+    });
