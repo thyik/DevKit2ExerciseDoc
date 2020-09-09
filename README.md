@@ -288,7 +288,13 @@ mysql> CREATE TABLE table1(
 
 //
 mysql> ALTER TABLE Persons
-ADD PRIMARY KEY (ID);       
+ADD PRIMARY KEY (ID);      
+
+// change to auto increment
+ALTER TABLE users CHANGE user_id user_id INT(1) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+// change date to auto generate current datetime timestamp
+ALTER TABLE transactions MODIFY date DATETIME NOT NULL DEFAULT NOW();
 ```  
 
 * `FOREIGN KEY` clause
@@ -296,7 +302,7 @@ ADD PRIMARY KEY (ID);
 
 ```sql
 mysql> ALTER TABLE table2
-       ADD FOREIGN KEY (COL2) REFERENCE table1(COL2);
+       ADD FOREIGN KEY (COL2) REFERENCES table1(COL2);
 ```
 
 ## Practical Exercise #4 
